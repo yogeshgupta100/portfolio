@@ -3,8 +3,6 @@ import {
   Download,
   Mail,
   Github,
-  Linkedin,
-  Twitter,
   ArrowDown,
   Code,
   Database,
@@ -175,7 +173,7 @@ const Hero = () => {
           className="social-links"
         >
           <a
-            href="https://github.com"
+            href="https://github.com/yogeshgupta100"
             target="_blank"
             rel="noopener noreferrer"
             className="social-link"
@@ -183,26 +181,6 @@ const Hero = () => {
           >
             <Github size={24} />
             <span className="social-label">GitHub</span>
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link"
-            aria-label="LinkedIn Profile"
-          >
-            <Linkedin size={24} />
-            <span className="social-label">LinkedIn</span>
-          </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link"
-            aria-label="Twitter Profile"
-          >
-            <Twitter size={24} />
-            <span className="social-label">Twitter</span>
           </a>
         </motion.div>
       </div>

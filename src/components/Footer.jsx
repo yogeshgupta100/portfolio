@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter, Heart } from "lucide-react";
+import { Github, Heart } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -7,18 +7,8 @@ const Footer = () => {
   const socialLinks = [
     {
       icon: <Github size={20} />,
-      url: "https://github.com",
+      url: "https://github.com/yogeshgupta100",
       label: "GitHub",
-    },
-    {
-      icon: <Linkedin size={20} />,
-      url: "https://linkedin.com",
-      label: "LinkedIn",
-    },
-    {
-      icon: <Twitter size={20} />,
-      url: "https://twitter.com",
-      label: "Twitter",
     },
   ];
 
@@ -81,7 +71,7 @@ const Footer = () => {
           >
             <h4>Contact Info</h4>
             <ul>
-              <li>fullstackdevyg@gmail.com</li>
+              <li>yogeshgupta6524@gmail.com</li>
               <li>+91 9873287387</li>
               <li>Gurugram, Haryana, India</li>
             </ul>

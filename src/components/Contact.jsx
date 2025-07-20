@@ -6,8 +6,6 @@ import {
   MapPin,
   Send,
   Github,
-  Linkedin,
-  Twitter,
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
@@ -102,9 +100,9 @@ const Contact = () => {
     {
       icon: <Mail size={24} />,
       title: "Email",
-      value: "fullstackdevyg@gmail.com",
-      link: "mailto:fullstackdevyg@gmail.com",
-      description: "I'll respond within 24 hours",
+      value: "yogeshgupta6524@gmail.com",
+      link: "mailto:yogeshgupta6524@gmail.com",
+      description: "Send me an email for collaboration or inquiries",
     },
     {
       icon: <Phone size={24} />,
@@ -125,21 +123,9 @@ const Contact = () => {
   const socialLinks = [
     {
       icon: <Github size={24} />,
-      url: "https://github.com",
+      url: "https://github.com/yogeshgupta100",
       label: "GitHub",
       description: "View my code",
-    },
-    {
-      icon: <Linkedin size={24} />,
-      url: "https://linkedin.com",
-      label: "LinkedIn",
-      description: "Connect professionally",
-    },
-    {
-      icon: <Twitter size={24} />,
-      url: "https://twitter.com",
-      label: "Twitter",
-      description: "Follow for updates",
     },
   ];
 
