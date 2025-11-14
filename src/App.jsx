@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useNavigate,
   useParams,
+  useLocation,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -12,6 +13,7 @@ import About from "./components/About";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
+import ContactPage from "./components/ContactPage";
 import Footer from "./components/Footer";
 import ProjectDetails from "./components/ProjectDetails";
 import "./App.css";
@@ -41,29 +43,21 @@ const ProjectDetailsPage = () => {
   return <ProjectDetails projectId={projectId} onBack={handleBack} />;
 };
 
-function App() {
-  const [isLoading, setIsLoading] = useState(true);
+// Scroll to top component
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  return null;
+};
 
-  if (isLoading) {
-    return (
-      <div className="loading-screen">
-        <div className="loader"></div>
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
+function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <Navbar />
         <main>
@@ -73,6 +67,7 @@ function App() {
               path="/project/:projectId"
               element={<ProjectDetailsPage />}
             />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>
         <Footer />

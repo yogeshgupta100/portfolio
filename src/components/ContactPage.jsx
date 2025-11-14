@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Mail,
@@ -7,18 +7,33 @@ import {
   Send,
   CheckCircle,
   AlertCircle,
+  ArrowLeft,
+  Home,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const Contact = () => {
+const ContactPage = () => {
+  const navigate = useNavigate();
   const contactRef = useRef(null);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   const { scrollYProgress } = useScroll({
     target: contactRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const y3 = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    [1, 1, 1, 0.8]
+  );
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -86,8 +101,20 @@ const Contact = () => {
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Here you can integrate with a backend service like EmailJS, Formspree, or your own API
+      // For now, we'll simulate a successful submission
+
+      // Example: Using mailto as fallback (you can replace this with actual API call)
+      const mailtoLink = `mailto:yogeshgupta6524@gmail.com?subject=${encodeURIComponent(
+        formData.subject
+      )}&body=${encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      )}`;
+
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       setSubmitStatus("success");
       setFormData({
         name: "",
@@ -95,13 +122,19 @@ const Contact = () => {
         subject: "",
         message: "",
       });
-      setIsSubmitting(false);
 
       // Reset status after 5 seconds
       setTimeout(() => {
         setSubmitStatus(null);
       }, 5000);
-    }, 2000);
+    } catch (error) {
+      setSubmitStatus("error");
+      setTimeout(() => {
+        setSubmitStatus(null);
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -129,18 +162,49 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="contact" ref={contactRef}>
+    <section id="contact" className="contact contact-page" ref={contactRef}>
+      {/* Enhanced Parallax Background Layers */}
       <motion.div className="parallax-bg parallax-bg-contact" style={{ y }} />
       <motion.div
         className="parallax-bg parallax-bg-contact-2"
         style={{ y: y2 }}
       />
+      <motion.div
+        className="parallax-bg parallax-bg-contact-3"
+        style={{ y: y3 }}
+      />
+
       <div className="container" style={{ opacity }}>
+        <motion.button
+          onClick={() => {
+            navigate("/");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="back-to-home-btn"
+          initial={{ opacity: 0, x: -30, scale: 0.9 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          whileHover={{
+            scale: 1.05,
+            x: -5,
+            transition: { duration: 0.2 },
+          }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <motion.div
+            animate={{ x: [0, -3, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ArrowLeft size={20} />
+          </motion.div>
+          <span>Back to Portfolio</span>
+          <Home size={16} className="home-icon" />
+        </motion.button>
+
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
           className="section-header"
         >
           <h2>Get In Touch</h2>
@@ -150,9 +214,8 @@ const Contact = () => {
         <div className="contact-content">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="contact-info"
           >
             <h3>Let's Connect</h3>
@@ -167,9 +230,8 @@ const Contact = () => {
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                   className="contact-item"
                 >
                   <div className="contact-icon">{info.icon}</div>
@@ -185,9 +247,8 @@ const Contact = () => {
 
           <motion.div
             initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="contact-form"
           >
             <form onSubmit={handleSubmit}>
@@ -278,6 +339,17 @@ const Contact = () => {
                 </motion.div>
               )}
 
+              {submitStatus === "error" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="error-message-form"
+                >
+                  <AlertCircle size={20} />
+                  Something went wrong. Please try again or email me directly.
+                </motion.div>
+              )}
+
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -303,4 +375,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactPage;

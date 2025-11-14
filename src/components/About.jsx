@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import {
   User,
   Briefcase,
@@ -9,6 +10,15 @@ import {
 } from "lucide-react";
 
 const About = () => {
+  const aboutRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: aboutRef,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
   const experiences = [
     {
       title: "Full Stack Developer",
@@ -78,8 +88,13 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="about">
-      <div className="container">
+    <section id="about" className="about" ref={aboutRef}>
+      <motion.div className="parallax-bg parallax-bg-about" style={{ y }} />
+      <motion.div
+        className="parallax-bg parallax-bg-about-2"
+        style={{ y: y2 }}
+      />
+      <div className="container" style={{ opacity }}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -162,7 +177,10 @@ const About = () => {
                     viewport={{ once: true }}
                     className="timeline-item"
                   >
-                    <div className="timeline-content">
+                    <motion.div
+                      className="timeline-content"
+                      whileHover={{ x: 5 }}
+                    >
                       <div className="timeline-header">
                         <h4>{exp.title}</h4>
                         <span className="company-badge">{exp.company}</span>
@@ -190,7 +208,7 @@ const About = () => {
                           ))}
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   </motion.div>
                 ))}
               </div>
@@ -211,7 +229,10 @@ const About = () => {
                     viewport={{ once: true }}
                     className="timeline-item"
                   >
-                    <div className="timeline-content">
+                    <motion.div
+                      className="timeline-content"
+                      whileHover={{ x: 5 }}
+                    >
                       <div className="timeline-header">
                         <h4>{edu.degree}</h4>
                         <span className="school-badge">{edu.school}</span>
@@ -230,7 +251,7 @@ const About = () => {
                           </ul>
                         </div>
                       )}
-                    </div>
+                    </motion.div>
                   </motion.div>
                 ))}
               </div>

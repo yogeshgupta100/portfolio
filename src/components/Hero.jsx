@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import {
   Download,
   Mail,
@@ -10,6 +11,31 @@ import {
 } from "lucide-react";
 
 const Hero = () => {
+  const heroRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const y3 = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   const scrollToContact = () => {
     const element = document.querySelector("#contact");
     if (element) {
@@ -31,21 +57,31 @@ const Hero = () => {
   ];
 
   return (
-    <section id="home" className="hero">
+    <section id="home" className="hero" ref={heroRef}>
+      {/* Parallax background layers */}
+      <motion.div className="parallax-bg parallax-bg-1" style={{ y, scale }} />
+      <motion.div className="parallax-bg parallax-bg-2" style={{ y: y2 }} />
+      <motion.div className="parallax-bg parallax-bg-3" style={{ y: y3 }} />
+      <motion.div
+        className="parallax-bg parallax-bg-4"
+        style={{ y: useTransform(scrollYProgress, [0, 1], ["0%", "40%"]) }}
+      />
+
       {/* Background floating icons */}
       <div className="floating-icons">
         {floatingIcons.map((item, index) => (
           <motion.div
             key={index}
             className="floating-icon"
-            initial={{ opacity: 0, x: item.x, y: item.y }}
+            initial={{ opacity: 0, x: item.x, y: item.y, scale: 0 }}
             animate={{
-              opacity: [0, 1, 0],
-              x: [item.x, item.x + 10, item.x],
-              y: [item.y, item.y - 10, item.y],
+              opacity: 0.3,
+              x: [item.x, item.x + 20, item.x - 20, item.x],
+              y: [item.y, item.y - 20, item.y + 20, item.y],
+              scale: [1, 1.2, 0.8, 1],
             }}
             transition={{
-              duration: 3,
+              duration: 8,
               delay: item.delay,
               repeat: Infinity,
               ease: "easeInOut",
@@ -56,12 +92,16 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="hero-container">
+      <motion.div className="hero-container" style={{ opacity, scale }}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="hero-content"
+          style={{
+            x: mousePosition.x * 0.5,
+            y: mousePosition.y * 0.5,
+          }}
         >
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -146,12 +186,25 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="hero-image"
+          style={{
+            x: -mousePosition.x * 0.3,
+            y: -mousePosition.y * 0.3,
+          }}
         >
           <div className="profile-placeholder">
             <motion.div
               className="profile-circle"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              animate={{
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{
+                rotate: {
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }}
             >
               <span>👨‍💻</span>
             </motion.div>
@@ -160,6 +213,7 @@ const Hero = () => {
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 1.2 }}
+              whileHover={{ scale: 1.05 }}
             >
               <span>Node.js • FastAPI • React • AWS</span>
             </motion.div>
@@ -183,7 +237,7 @@ const Hero = () => {
             <span className="social-label">GitHub</span>
           </a>
         </motion.div>
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

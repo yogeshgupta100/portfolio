@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import {
   Code,
   Palette,
@@ -12,6 +13,15 @@ import {
 } from "lucide-react";
 
 const Skills = () => {
+  const skillsRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: skillsRef,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
   const skillCategories = [
     {
       title: "Programming Languages",
@@ -234,8 +244,13 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="skills">
-      <div className="container">
+    <section id="skills" className="skills" ref={skillsRef}>
+      <motion.div className="parallax-bg parallax-bg-skills" style={{ y }} />
+      <motion.div
+        className="parallax-bg parallax-bg-skills-2"
+        style={{ y: y2 }}
+      />
+      <div className="container" style={{ opacity }}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -274,6 +289,7 @@ const Skills = () => {
                     transition={{ duration: 0.5, delay: skillIndex * 0.1 }}
                     viewport={{ once: true }}
                     className="skill-item"
+                    whileHover={{ x: 5 }}
                   >
                     <div className="skill-info">
                       <div className="skill-details">
@@ -288,9 +304,14 @@ const Skills = () => {
                       <motion.div
                         initial={{ width: 0 }}
                         whileInView={{ width: `${skill.level}%` }}
-                        transition={{ duration: 1, delay: 0.2 }}
+                        transition={{
+                          duration: 1.5,
+                          delay: 0.2,
+                          ease: "easeOut",
+                        }}
                         viewport={{ once: true }}
                         className="skill-progress"
+                        whileHover={{ scaleX: 1.05 }}
                       />
                     </div>
                   </motion.div>

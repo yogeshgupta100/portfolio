@@ -73,7 +73,7 @@ const Footer = () => {
             <ul>
               <li>yogeshgupta6524@gmail.com</li>
               <li>+91 9873287387</li>
-              <li>Gurugram, Haryana, India</li>
+              <li>New Delhi, India</li>
             </ul>
           </motion.div>
 
